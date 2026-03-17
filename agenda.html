@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Agenda de Contactos</title>
+</head>
+
+<body>
+
+<h1>Agenda de Contactos</h1>
+ <!-- IMPUTS PRINCIALES -->
+<label>Nombre:</label><br> 
+<input type="text" id="nombre"><br>  
+
+<label>Dirección:</label><br>
+<input type="text" id="direccion"><br>
+
+<label>Teléfono:</label><br>
+<input type="text" id="telefono"><br>
+
+<label>Correo:</label><br>
+<input type="text" id="correo"><br>
+
+<label>URL Foto:</label><br>
+<input type="text" id="foto"><br><br>
+
+<button onclick="agregar()">Agregar</button> <!-- BOTON AGREGAR -->
+<button onclick="limpiar()">Limpiar</button>  <!-- BOTON LIMPIAR -->
+
+<br><br>
+
+<label>Buscar:</label>    <!-- LABEL BUSCAR -->
+<input type="text" id="buscar"> 
+<button onclick="buscar()">Buscar</button>
+
+<h2>Contactos</h2>
+<div id="lista"></div>
+
+<script>
+
+let contactos = [];  
+
+function agregar(){  // FUNCION PARA AGREGAR
+// Se toman los datos que el usuario escribió en los inputs
+let contacto = {
+nombre: document.getElementById("nombre").value, 
+direccion: document.getElementById("direccion").value,
+telefono: document.getElementById("telefono").value,
+correo: document.getElementById("correo").value,
+foto: document.getElementById("foto").value
+};
+
+contactos.push(contacto);   // Se agrega el contacto a la lista
+
+localStorage.setItem("agenda", JSON.stringify(contactos));   // Se guarda la lista en localStorage
+
+mostrar();    // Se muestra la lista
+
+}
+
+function mostrar(){   // FUNCION PARA MOSTRAR
+
+let lista = document.getElementById("lista");    // Se obtiene el elemento con id "lista"
+lista.innerHTML = "";    // Se limpia el contenido del elemento
+
+contactos.forEach(function(contacto, indice){    // Se itera sobre cada contacto
+lista.innerHTML += `        
+<li>
+<b>${contacto.nombre}</b><br>    
+Direccion: ${contacto.direccion}<br>
+Telefono: ${contacto.telefono}<br>
+Correo: ${contacto.correo}<br>
+<img src="${contacto.foto}" width="80"><br>
+<button onclick="eliminar(${indice})">Eliminar</button>    
+</li>
+<br>
+`;
+});
+
+}
+
+// eliminar
+function eliminar(indice){
+ 
+contactos.splice(indice,1);    // Se elimina el contacto en la posición indicada
+
+localStorage.setItem("agenda", JSON.stringify(contactos));    // Se guarda la lista en localStorage
+
+mostrar();
+
+}
+
+// buscar
+function buscar(){
+
+let texto = document.getElementById("buscar").value.toLowerCase();    // Se obtiene el texto que se escribió en el input con id "buscar"
+let lista = document.getElementById("lista");            // Se obtiene el elemento con id "lista"   
+lista.innerHTML = "";
+
+contactos.forEach(function(contacto){    // foreach sirve para acomodar un arreglo 
+
+if ( contacto.nombre.toLowerCase().includes(texto) || contacto.direccion.toLowerCase().includes(texto) || contacto.telefono.includes(texto) || contacto.correo.toLowerCase().includes(texto)){
+lista.innerHTML += `           
+
+<li>
+<b>${contacto.nombre}</b><br>
+Direccion: ${contacto.direccion}<br>
+Telefono: ${contacto.telefono}<br>
+Correo: ${contacto.correo}<br>
+<img src="${contacto.foto}" width="80">
+</li>
+<br>
+`;
+ // ${indice} Envía la posición del contacto.
+}
+
+});
+
+}
+
+function limpiar(){
+
+contactos = []; // vacía el arreglo
+
+localStorage.removeItem("agenda"); // elimina del almacenamiento
+
+mostrar(); // actualiza la pantalla
+
+document.getElementById("nombre").value = "";
+document.getElementById("direccion").value = "";
+document.getElementById("telefono").value = "";
+document.getElementById("correo").value = "";
+document.getElementById("foto").value = "";
+document.getElementById("buscar").value = "";
+
+}
+
+mostrar();
+
+</script>
+
+</body>
+</html>
