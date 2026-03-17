@@ -10,7 +10,7 @@
 <h1>Agenda de Contactos</h1>
  <!-- IMPUTS PRINCIALES -->
 <label>Nombre:</label><br> 
-<input type="text" id="nombre"><br>  
+<input type="text" id="nombre"><br>   
 
 <label>Dirección:</label><br>
 <input type="text" id="direccion"><br>
@@ -31,37 +31,37 @@
 
 <label>Buscar:</label>    <!-- LABEL BUSCAR -->
 <input type="text" id="buscar"> 
-<button onclick="buscar()">Buscar</button>
+<button onclick="buscar()">Buscar</button>  
 
 <h2>Contactos</h2>
 <div id="lista"></div>
 
 <script>
 
-let contactos = JSON.parse(localStorage.getItem("agenda")) || [];
+let contactos = JSON.parse(localStorage.getItem("agenda")) || []; // se obtiene el contenido de localStorage
 
-function agregar(){  
+function agregar(){     // FUNCION PARA AGREGAR
 let contacto = {
-nombre: document.getElementById("nombre").value, 
-direccion: document.getElementById("direccion").value,
-telefono: document.getElementById("telefono").value,
+nombre: document.getElementById("nombre").value,   // se toman los datos que el usuario escribió en los inputs
+direccion: document.getElementById("direccion").value,    // se toman los datos que el usuario escribió en los inputs
+telefono: document.getElementById("telefono").value, //
 correo: document.getElementById("correo").value,
 foto: document.getElementById("foto").value
 };
 
-contactos.push(contacto);   
-localStorage.setItem("agenda", JSON.stringify(contactos));   
+contactos.push(contacto);    // se agrega el contacto a la lista
+localStorage.setItem("agenda", JSON.stringify(contactos));    // se guarda la lista en localStorage
 mostrar();    
 }
 
-function mostrar(){   
-let lista = document.getElementById("lista");    
+function mostrar(){     // FUNCION PARA MOSTRAR
+let lista = document.getElementById("lista");     // se obtiene el elemento con id "lista"
 lista.innerHTML = "";    
 
-contactos.forEach(function(contacto, indice){    
+contactos.forEach(function(contacto, indice){    // se itera sobre cada contacto
 lista.innerHTML += `        
 <li>
-<b>${contacto.nombre}</b><br>    
+<b>${contacto.nombre}</b><br>     
 Direccion: ${contacto.direccion}<br>
 Telefono: ${contacto.telefono}<br>
 Correo: ${contacto.correo}<br>
@@ -72,16 +72,16 @@ Correo: ${contacto.correo}<br>
 <br>
 `;
 });
-}
+} // FIN FUNCION MOSTRAR
 
-function editar(indice){
-let nuevoNombre = prompt("Nuevo nombre:", contactos[indice].nombre);
+function editar(indice){ // FUNCION PARA EDITAR
+let nuevoNombre = prompt("Nuevo nombre:", contactos[indice].nombre);    // se obtiene el texto que se escribió en el input con id "buscar"
 let nuevaDireccion = prompt("Nueva direccion:", contactos[indice].direccion);
 let nuevoTelefono = prompt("Nuevo telefono:", contactos[indice].telefono);
 let nuevoCorreo = prompt("Nuevo correo:", contactos[indice].correo);
 let nuevaFoto = prompt("Nueva foto:", contactos[indice].foto);
 
-contactos[indice].nombre = nuevoNombre;
+contactos[indice].nombre = nuevoNombre;    // se cambia el valor del texto que se escribió en el input con id "buscar"
 contactos[indice].direccion = nuevaDireccion;
 contactos[indice].telefono = nuevoTelefono;
 contactos[indice].correo = nuevoCorreo;
@@ -91,19 +91,19 @@ localStorage.setItem("agenda", JSON.stringify(contactos));
 mostrar();
 }
 
-function eliminar(indice){
+function eliminar(indice){    // FUNCION PARA ELIMINAR
 contactos.splice(indice,1);    
-localStorage.setItem("agenda", JSON.stringify(contactos));    
+localStorage.setItem("agenda", JSON.stringify(contactos));          // se elimina el contacto en la posición indicada
 mostrar();
 }
 
-function buscar(){
-let texto = document.getElementById("buscar").value.toLowerCase();    
+function buscar(){    // FUNCION PARA BUSCAR
+let texto = document.getElementById("buscar").value.toLowerCase();     // se obtiene el texto que se escribió en el input con id "buscar"
 let lista = document.getElementById("lista");            
-lista.innerHTML = "";
+lista.innerHTML = "";    // se limpia el contenido del elemento
 
 contactos.forEach(function(contacto){    
-if ( contacto.nombre.toLowerCase().includes(texto)) {
+if ( contacto.nombre.toLowerCase().includes(texto)) {        // se itera sobre cada contacto
 lista.innerHTML += `           
 <li>
 <b>${contacto.nombre}</b><br>
@@ -118,20 +118,20 @@ Correo: ${contacto.correo}<br>
 });
 }
 
-function limpiar(){
+function limpiar(){    // FUNCION PARA LIMPIAR
 contactos = []; 
-localStorage.removeItem("agenda"); 
+localStorage.removeItem("agenda");    // se elimina del almacenamiento
 mostrar(); 
 
-document.getElementById("nombre").value = "";
+document.getElementById("nombre").value = "";        // se limpia el contenido del elemento
 document.getElementById("direccion").value = "";
-document.getElementById("telefono").value = "";
+document.getElementById("telefono").value = "";    // se limpia el contenido del elemento   
 document.getElementById("correo").value = "";
-document.getElementById("foto").value = "";
+document.getElementById("foto").value = "";        // se limpia el contenido del elemento
 document.getElementById("buscar").value = "";
 }
 
-mostrar();
+mostrar();          // se actualiza la pantalla
 
 </script>
 
