@@ -38,10 +38,9 @@
 
 <script>
 
-let contactos = [];  
+let contactos = JSON.parse(localStorage.getItem("agenda")) || [];
 
-function agregar(){  // FUNCION PARA AGREGAR
-// Se toman los datos que el usuario escribió en los inputs
+function agregar(){  
 let contacto = {
 nombre: document.getElementById("nombre").value, 
 direccion: document.getElementById("direccion").value,
@@ -50,20 +49,16 @@ correo: document.getElementById("correo").value,
 foto: document.getElementById("foto").value
 };
 
-contactos.push(contacto);   // Se agrega el contacto a la lista
-
-localStorage.setItem("agenda", JSON.stringify(contactos));   // Se guarda la lista en localStorage
-
-mostrar();    // Se muestra la lista
-
+contactos.push(contacto);   
+localStorage.setItem("agenda", JSON.stringify(contactos));   
+mostrar();    
 }
 
-function mostrar(){   // FUNCION PARA MOSTRAR
+function mostrar(){   
+let lista = document.getElementById("lista");    
+lista.innerHTML = "";    
 
-let lista = document.getElementById("lista");    // Se obtiene el elemento con id "lista"
-lista.innerHTML = "";    // Se limpia el contenido del elemento
-
-contactos.forEach(function(contacto, indice){    // Se itera sobre cada contacto
+contactos.forEach(function(contacto, indice){    
 lista.innerHTML += `        
 <li>
 <b>${contacto.nombre}</b><br>    
@@ -71,37 +66,45 @@ Direccion: ${contacto.direccion}<br>
 Telefono: ${contacto.telefono}<br>
 Correo: ${contacto.correo}<br>
 <img src="${contacto.foto}" width="80"><br>
+<button onclick="editar(${indice})">Editar</button> <!-- BOTON EDITAR AGREGADO -->
 <button onclick="eliminar(${indice})">Eliminar</button>    
 </li>
 <br>
 `;
 });
-
 }
 
-// eliminar
-function eliminar(indice){
- 
-contactos.splice(indice,1);    // Se elimina el contacto en la posición indicada
+function editar(indice){
+let nuevoNombre = prompt("Nuevo nombre:", contactos[indice].nombre);
+let nuevaDireccion = prompt("Nueva direccion:", contactos[indice].direccion);
+let nuevoTelefono = prompt("Nuevo telefono:", contactos[indice].telefono);
+let nuevoCorreo = prompt("Nuevo correo:", contactos[indice].correo);
+let nuevaFoto = prompt("Nueva foto:", contactos[indice].foto);
 
-localStorage.setItem("agenda", JSON.stringify(contactos));    // Se guarda la lista en localStorage
+contactos[indice].nombre = nuevoNombre;
+contactos[indice].direccion = nuevaDireccion;
+contactos[indice].telefono = nuevoTelefono;
+contactos[indice].correo = nuevoCorreo;
+contactos[indice].foto = nuevaFoto;
 
+localStorage.setItem("agenda", JSON.stringify(contactos));
 mostrar();
-
 }
 
-// buscar
-function buscar(){
+function eliminar(indice){
+contactos.splice(indice,1);    
+localStorage.setItem("agenda", JSON.stringify(contactos));    
+mostrar();
+}
 
-let texto = document.getElementById("buscar").value.toLowerCase();    // Se obtiene el texto que se escribió en el input con id "buscar"
-let lista = document.getElementById("lista");            // Se obtiene el elemento con id "lista"   
+function buscar(){
+let texto = document.getElementById("buscar").value.toLowerCase();    
+let lista = document.getElementById("lista");            
 lista.innerHTML = "";
 
-contactos.forEach(function(contacto){    // foreach sirve para acomodar un arreglo 
-
-if ( contacto.nombre.toLowerCase().includes(texto) || contacto.direccion.toLowerCase().includes(texto) || contacto.telefono.includes(texto) || contacto.correo.toLowerCase().includes(texto)){
+contactos.forEach(function(contacto){    
+if ( contacto.nombre.toLowerCase().includes(texto)) {
 lista.innerHTML += `           
-
 <li>
 <b>${contacto.nombre}</b><br>
 Direccion: ${contacto.direccion}<br>
@@ -111,20 +114,14 @@ Correo: ${contacto.correo}<br>
 </li>
 <br>
 `;
- // ${indice} Envía la posición del contacto.
 }
-
 });
-
 }
 
 function limpiar(){
-
-contactos = []; // vacía el arreglo
-
-localStorage.removeItem("agenda"); // elimina del almacenamiento
-
-mostrar(); // actualiza la pantalla
+contactos = []; 
+localStorage.removeItem("agenda"); 
+mostrar(); 
 
 document.getElementById("nombre").value = "";
 document.getElementById("direccion").value = "";
@@ -132,7 +129,6 @@ document.getElementById("telefono").value = "";
 document.getElementById("correo").value = "";
 document.getElementById("foto").value = "";
 document.getElementById("buscar").value = "";
-
 }
 
 mostrar();
