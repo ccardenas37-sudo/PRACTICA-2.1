@@ -33,6 +33,11 @@
 <input type="text" id="buscar"> 
 <button onclick="buscar()">Buscar</button>  
 
+<!-- BOTONES AGREGADOS -->
+<button onclick="buscarDireccion()">Direccion</button>
+<button onclick="buscarTelefono()">Telefono</button>
+<button onclick="buscarCorreo()">Correo</button>
+
 <h2>Contactos</h2>
 <div id="lista"></div>
 
@@ -125,16 +130,94 @@ function buscar(){    // FUNCION PARA BUSCAR
     });
 }
 
+// BUSCAR POR DIRECCION
+function buscarDireccion(){
+
+    let texto = document.getElementById("buscar").value.toLowerCase();
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    contactos.forEach(function(contacto){
+
+        if(contacto.direccion.toLowerCase().includes(texto)){
+
+            lista.innerHTML += `
+            <li>
+            <b>${contacto.nombre}</b><br>
+            Direccion: ${contacto.direccion}<br>
+            Telefono: ${contacto.telefono}<br>
+            Correo: ${contacto.correo}<br>
+            <img src="${contacto.foto}" width="80">
+            </li>
+            <br>
+            `;
+        }
+
+    });
+}
+
+// BUSCAR POR TELEFONO
+function buscarTelefono(){
+
+    let texto = document.getElementById("buscar").value;
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    contactos.forEach(function(contacto){
+
+        if(contacto.telefono.includes(texto)){
+
+            lista.innerHTML += `
+            <li>
+            <b>${contacto.nombre}</b><br>
+            Direccion: ${contacto.direccion}<br>
+            Telefono: ${contacto.telefono}<br>
+            Correo: ${contacto.correo}<br>
+            <img src="${contacto.foto}" width="80">
+            </li>
+            <br>
+            `;
+        }
+
+    });
+}
+
+// BUSCAR POR CORREO
+function buscarCorreo(){
+
+    let texto = document.getElementById("buscar").value.toLowerCase();
+    let lista = document.getElementById("lista");
+    lista.innerHTML = "";
+
+    contactos.forEach(function(contacto){
+
+        if(contacto.correo.toLowerCase().includes(texto)){
+
+            lista.innerHTML += `
+            <li>
+            <b>${contacto.nombre}</b><br>
+            Direccion: ${contacto.direccion}<br>
+            Telefono: ${contacto.telefono}<br>
+            Correo: ${contacto.correo}<br>
+            <img src="${contacto.foto}" width="80">
+            </li>
+            <br>
+            `;
+        }
+
+    });
+}
+
 function limpiar(){    // FUNCION PARA LIMPIAR
     contactos = []; 
     localStorage.removeItem("agenda");    // se elimina del almacenamiento
     mostrar(); 
 
-    document.getElementById("nombre").value = "";        // se limpia el contenido del elemento
+    document.getElementById("nombre").value = "";        
     document.getElementById("direccion").value = "";
-    document.getElementById("telefono").value = "";    // se limpia el contenido del elemento   
+    document.getElementById("telefono").value = "";       
     document.getElementById("correo").value = "";
-    document.getElementById("foto").value = "";        // se limpia el contenido del elemento
+    document.getElementById("foto").value = "";        
     document.getElementById("buscar").value = "";
 }
 
